@@ -23,42 +23,45 @@
 </div>
 
 <script>
-// ---- Questions storage ----
+// Questions storage
 let questions = JSON.parse(localStorage.getItem("questions")) || [];
 
-// ---- Functions ----
+// Save
 function save() { localStorage.setItem("questions", JSON.stringify(questions)); }
 
+// Answer a question
 function answerQuestion(i){
-  let a = prompt("Type your answer:");
-  if(a){
-    questions[i].answer = a;
-    save();
-    render();
-  }
+    let a = prompt("Type your answer:");
+    if(a){
+        questions[i].answer = a;
+        save();
+        render();
+    }
 }
 
+// Delete a question
 function deleteQuestion(i){
-  if(confirm("Delete this question?")){
-    questions.splice(i,1);
-    save();
-    render();
-  }
+    if(confirm("Delete this question?")){
+        questions.splice(i,1);
+        save();
+        render();
+    }
 }
 
+// Render
 function render(){
-  const container = document.getElementById("questions");
-  container.innerHTML = "";
-  questions.forEach((q,i)=>{
-    container.innerHTML += `
-      <div class="card">
-        <b>Question:</b> ${q.question}<br><br>
-        <button onclick="answerQuestion(${i})">Answer</button>
-        <button onclick="deleteQuestion(${i})">Delete</button>
-        ${q.answer ? `<div class="answer"><b>Answer:</b> ${q.answer}</div>` : ""}
-      </div>
-    `;
-  });
+    const container = document.getElementById("questions");
+    container.innerHTML = "";
+    questions.forEach((q,i)=>{
+        container.innerHTML += `
+            <div class="card">
+                <b>Question:</b> ${q.question}<br><br>
+                <button onclick="answerQuestion(${i})">Answer</button>
+                <button onclick="deleteQuestion(${i})">Delete</button>
+                ${q.answer ? `<div class="answer"><b>Answer:</b> ${q.answer}</div>` : ""}
+            </div>
+        `;
+    });
 }
 
 render();
