@@ -40,34 +40,37 @@
 </div>
 
 <script>
-// ---- Questions storage ----
+// Questions storage
 let questions = JSON.parse(localStorage.getItem("questions")) || [];
 
-// ---- Functions ----
+// Save
 function save() { localStorage.setItem("questions", JSON.stringify(questions)); }
 
+// Ask
 function askQuestion() {
     let q = document.getElementById("questionInput").value.trim();
-    if (!q) return;
-    questions.push({ question: q, answer: "" });
+    if(!q) return;
+    questions.push({question:q, answer:""});
     save();
     render();
     document.getElementById("questionInput").value = "";
 }
 
+// Admin login redirect
 function loginAdmin() {
     const password = document.getElementById("adminPassword").value;
-    if (password === "admin123") {  // Change this
+    if(password === "admin123"){ // change this to your password
         window.location.href = "admin.html";
     } else {
         alert("Wrong password!");
     }
 }
 
+// Render questions
 function render() {
     const container = document.getElementById("questions");
     container.innerHTML = "";
-    questions.forEach(q => {
+    questions.forEach(q=>{
         container.innerHTML += `
             <div class="card">
                 <b>Question:</b> ${q.question}<br>
@@ -77,90 +80,8 @@ function render() {
     });
 }
 
-// ---- Initial render ----
 render();
 </script>
 
 </body>
 </html>
-style.css (Pastel & Spacious)
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #cde7ff, #ffd6f6, #fff3cc);
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    text-align: center;
-    font-size: 42px;
-    padding: 30px;
-    font-weight: bold;
-    color: #5a5a5a;
-    text-shadow: 1px 1px 2px #ffffff;
-}
-
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 25px;
-}
-
-.card {
-    background: #ffffffcc;
-    border-radius: 20px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-    transition: transform 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-}
-
-input, textarea {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-    background: #fffaf0;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-button {
-    margin-top: 12px;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 15px;
-    background: #ffa8d3;
-    color: #4a4a4a;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-    background: #ffd1ec;
-    transform: scale(1.05);
-}
-
-.answer {
-    margin-top: 12px;
-    background: #e0f7ff;
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 15px;
-}
-
-ul li {
-    margin-bottom: 8px;
-}
-
-a button {
-    display: inline-block;
-    text-decoration: none;
-    text-align: center;
-}
