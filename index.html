@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>US Travel Bureau</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#cde7ff,#e8d8ff,#ffd6e7);
+    margin:0;
+}
+
+header{
+    text-align:center;
+    padding:30px;
+    font-size:40px;
+    font-weight:bold;
+    color:#4a4a4a;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+button{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#9fd3ff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#7fc2ff;
+}
+
+.answer{
+    margin-top:10px;
+    background:#f3f7ff;
+    padding:10px;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🌎 US Travel Bureau</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Ask a Travel Question</h2>
+<input id="questionInput" placeholder="Ask about travel in the United States...">
+<button onclick="submitQuestion()">Submit Question</button>
+</div>
+
+<div class="card">
+<h2>Questions</h2>
+<div id="questions"></div>
+</div>
+
+</div>
+
+<script>
+let questions = [];
+
+function submitQuestion(){
+    let q = document.getElementById("questionInput").value;
+
+    if(q.trim() === "") return;
+
+    questions.push({question:q, answer:""});
+    document.getElementById("questionInput").value="";
+    renderQuestions();
+}
+
+function answerQuestion(index){
+    let a = prompt("Type your answer:");
+    if(a){
+        questions[index].answer = a;
+        renderQuestions();
+    }
+}
+
+function renderQuestions(){
+    let container = document.getElementById("questions");
+    container.innerHTML="";
+
+    questions.forEach((q,i)=>{
+        container.innerHTML += `
+        <div class="card">
+        <b>Question:</b> ${q.question}
+        <br>
+        <button onclick="answerQuestion(${i})">Answer</button>
+
+        ${q.answer ? `<div class="answer"><b>Answer:</b> ${q.answer}</div>` : ""}
+        </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>
