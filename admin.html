@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>🛠️ Admin Panel</header>
+
+<div class="container">
+
+<div class="card">
+<h2>All Questions</h2>
+<div id="questions"></div>
+</div>
+
+<div class="card">
+<a href="index.html"><button>Go to Home</button></a>
+</div>
+
+</div>
+
+<script>
+// ---- Questions storage ----
+let questions = JSON.parse(localStorage.getItem("questions")) || [];
+
+// ---- Functions ----
+function save() { localStorage.setItem("questions", JSON.stringify(questions)); }
+
+function answerQuestion(i){
+  let a = prompt("Type your answer:");
+  if(a){
+    questions[i].answer = a;
+    save();
+    render();
+  }
+}
+
+function deleteQuestion(i){
+  if(confirm("Delete this question?")){
+    questions.splice(i,1);
+    save();
+    render();
+  }
+}
+
+function render(){
+  const container = document.getElementById("questions");
+  container.innerHTML = "";
+  questions.forEach((q,i)=>{
+    container.innerHTML += `
+      <div class="card">
+        <b>Question:</b> ${q.question}<br><br>
+        <button onclick="answerQuestion(${i})">Answer</button>
+        <button onclick="deleteQuestion(${i})">Delete</button>
+        ${q.answer ? `<div class="answer"><b>Answer:</b> ${q.answer}</div>` : ""}
+      </div>
+    `;
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
+about.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>About US Travel Bureau</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>🌎 US Travel Bureau - History</header>
+
+<div class="container">
+
+<div class="card">
+<h2>About the US Travel Bureau</h2>
+<p>The US Travel Bureau was a government organization during the Great Depression that promoted tourism and domestic travel. Its goal was to boost the economy by encouraging Americans to explore their country.</p>
+<p>It provided travel guides, maps, and support for travelers, helping small towns and local businesses.</p>
+</div>
+
+<div class="card">
+<h2>Fun Facts</h2>
+<ul>
+<li>Travel was a luxury during the Great Depression.</li>
+<li>The Bureau promoted scenic routes and road trips.</li>
+<li>Many of its brochures are now historical collectibles.</li>
+</ul>
+</div>
+
+<div class="card">
+<a href="index.html"><button>Go to Home / Ask Anything</button></a>
+</div>
+
+</div>
+</body>
+</html>
