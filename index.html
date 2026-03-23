@@ -1,81 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>US Travel Bureau</title>
-
+<title>Ask Anything - Public Q&A</title>
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#cde7ff,#e8d8ff,#ffd6e7);
-    margin:0;
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg,#cde7ff,#ffd6f6,#ffe5cc);
+  margin:0;
 }
-
-header{
-    text-align:center;
-    padding:30px;
-    font-size:40px;
-    font-weight:bold;
-    color:#4a4a4a;
+header {
+  text-align:center;
+  font-size:40px;
+  padding:25px;
+  font-weight:bold;
 }
-
-.container{
-    max-width:800px;
-    margin:auto;
-    padding:20px;
+.container {
+  max-width:800px;
+  margin:auto;
+  padding:20px;
 }
-
-.card{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+.card {
+  background:white;
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
-
-input, textarea{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    border-radius:10px;
-    border:1px solid #ddd;
+input, textarea {
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
 }
-
-button{
-    margin-top:10px;
-    padding:10px 20px;
-    border:none;
-    border-radius:10px;
-    background:#9fd3ff;
-    cursor:pointer;
-    font-weight:bold;
+button {
+  margin-top:10px;
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  background:#9fd3ff;
+  font-weight:bold;
+  cursor:pointer;
 }
-
-button:hover{
-    background:#7fc2ff;
+button:hover {
+  background:#7fc2ff;
 }
-
-.answer{
-    margin-top:10px;
-    background:#f3f7ff;
-    padding:10px;
-    border-radius:10px;
+.answer {
+  margin-top:10px;
+  background:#eef4ff;
+  padding:10px;
+  border-radius:10px;
 }
 </style>
 </head>
-
 <body>
 
-<header>🌎 US Travel Bureau</header>
+<header>💬 Ask Anything</header>
 
 <div class="container">
 
+<!-- Ask Question -->
 <div class="card">
-<h2>Ask a Travel Question</h2>
-<input id="questionInput" placeholder="Ask about travel in the United States...">
-<button onclick="submitQuestion()">Submit Question</button>
+<h2>Ask a Question</h2>
+<input id="questionInput" placeholder="Type your question here">
+<button onclick="askQuestion()">Submit</button>
 </div>
 
+<!-- Admin Login -->
+<div class="card">
+<h2>Admin Panel Login</h2>
+<input id="adminPassword" type="password" placeholder="Admin password">
+<button onclick="loginAdmin()">Login as Admin</button>
+<p id="adminStatus"></p>
+</div>
+
+<!-- Questions Section -->
 <div class="card">
 <h2>Questions</h2>
 <div id="questions"></div>
@@ -84,42 +84,63 @@ button:hover{
 </div>
 
 <script>
-let questions = [];
+// ---- Data storage ----
+let questions = JSON.parse(localStorage.getItem("questions")) || [];
+let isAdmin = false;
 
-function submitQuestion(){
-    let q = document.getElementById("questionInput").value;
-
-    if(q.trim() === "") return;
-
-    questions.push({question:q, answer:""});
-    document.getElementById("questionInput").value="";
-    renderQuestions();
+// ---- Functions ----
+function save() {
+  localStorage.setItem("questions", JSON.stringify(questions));
 }
 
-function answerQuestion(index){
-    let a = prompt("Type your answer:");
-    if(a){
-        questions[index].answer = a;
-        renderQuestions();
-    }
+function askQuestion() {
+  let q = document.getElementById("questionInput").value.trim();
+  if(!q) return;
+  questions.push({question:q, answer:""});
+  save();
+  render();
+  document.getElementById("questionInput").value = "";
 }
 
-function renderQuestions(){
-    let container = document.getElementById("questions");
-    container.innerHTML="";
+function loginAdmin() {
+  const password = document.getElementById("adminPassword").value;
+  // Change this password to whatever you want
+  if(password === "admin123") {
+    isAdmin = true;
+    document.getElementById("adminStatus").innerText = "Logged in as admin ✅";
+    render();
+  } else {
+    alert("Wrong password!");
+  }
+}
 
-    questions.forEach((q,i)=>{
-        container.innerHTML += `
-        <div class="card">
-        <b>Question:</b> ${q.question}
-        <br>
-        <button onclick="answerQuestion(${i})">Answer</button>
+function answerQuestion(i) {
+  if(!isAdmin) return alert("Admin login required!");
+  let a = prompt("Type your answer:");
+  if(a) {
+    questions[i].answer = a;
+    save();
+    render();
+  }
+}
 
+function render() {
+  const container = document.getElementById("questions");
+  container.innerHTML = "";
+  questions.forEach((q,i)=>{
+    container.innerHTML += `
+      <div class="card">
+        <b>Question:</b> ${q.question}<br><br>
+        ${isAdmin ? `<button onclick="answerQuestion(${i})">Answer</button>` : ""}
         ${q.answer ? `<div class="answer"><b>Answer:</b> ${q.answer}</div>` : ""}
-        </div>
-        `;
-    });
+      </div>
+    `;
+  });
 }
+
+// ---- Initial render ----
+render();
+
 </script>
 
 </body>
